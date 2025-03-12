@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nepal Job CV - PDF Upload</title>
+    <link rel="stylesheet" href="cv.css"> <!-- External CSS file -->
+</head>
+<body>   
+    <div class="container">
+        <h1>Upload PDF to Nepal Job CV</h1>
+        <img src="ncv logo.jpg" alt="Logo" class="file-thumbnail">
+
+        <!-- Search Bar -->
+        <input type="text" id="searchInput" placeholder="Search PDFs..." oninput="searchPDFs()">
+
+        <!-- File Upload -->
+        <input type="file" id="pdfInput" accept="application/pdf">
+        <button class="upload-btn" onclick="uploadPDF()">Upload PDF</button>
+
+        <!-- Notification area -->
+        <div id="notification" class="notification"></div>
+
+        <!-- PDF List -->
+        <div id="pdfList" class="pdf-list-container"></div>
+
+        <p class="warning">⚠️ Make sure your PDF file is less than 10MB.</p>
+    </div>
+
+    <script src="cv.js"></script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+/* Page background color */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #ffe600; /* Softer yellow background */
+}
+
+/* Container for PDFs */
+.container {
+    text-align: center;
+    width: 80%;
+    max-width: 1000px;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* Title */
+h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Search Bar */
+#searchInput {
+    width: 200px;
+    padding: 8px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 80px;
+    right: 80px;
+}
+
+/* General PDF List Style */
+#pdfList {
+    width: 100%;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+/* Individual PDF Item Style */
+.pdf-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.pdf-details {
+    display: flex;
+    align-items: center;
+}
+
+.file-thumbnail {
+    width: 40px; /* Adjust size of the thumbnail */
+    height: auto;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+.pdf-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* General Button Style */
+button {
+    margin-top: 20px;
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Upload Button */
+.upload-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.upload-btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Replace Button */
+.replace-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.replace-btn:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+/* Delete Button */
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #e53935;
+    transform: scale(1.05);
+}
+
+/* Notification styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.5s ease-in-out;
+    z-index: 1000;
+}
+
+/* Fade-in Animation for Notifications */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive styles for small screens */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 15px;
+        margin-bottom: 20px;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px 20px;
+    }
+
+    #searchInput {
+        width: 100%;
+        font-size: 14px;
+        margin-top: 45px;
+    }
+
+    /* Adjust PDF Item Layout for small screens */
+    .pdf-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
