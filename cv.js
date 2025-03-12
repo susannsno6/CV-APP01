@@ -1,9 +1,25 @@
-// Function to Display PDFs with Replace & Delete Buttons
+// Function to check if user is logged in and redirect if not
+function checkUserSession() {
+  const loggedInUser = sessionStorage.getItem("loggedInUser");
+  if (!loggedInUser) {
+      window.location.href = "index.html";  // Redirect to login page if not logged in
+  } else {
+      // User is logged in, display PDF management section
+      document.getElementById("upload-container").style.display = 'block';
+      displayPDFList();
+  }
+}
+
+// Display uploaded PDFs
 function displayPDFList() {
   const pdfListContainer = document.getElementById("pdfList");
   pdfListContainer.innerHTML = "";
 
   let storedPDFs = JSON.parse(localStorage.getItem("pdfFiles")) || [];
+  const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser")); // Get logged-in user
+
+  // Check if the logged-in user has delete authority
+  const canDelete = loggedInUser && loggedInUser.username === "9769761579";  // Only this user can delete
 
   if (storedPDFs.length === 0) {
       pdfListContainer.innerHTML = "<p>No PDFs uploaded yet.</p>";
@@ -14,6 +30,11 @@ function displayPDFList() {
       const pdfElement = document.createElement("div");
       pdfElement.classList.add("pdf-item");
 
+      // Append delete button only if the user has delete authority
+      const deleteButton = canDelete ? `
+          <button class="delete-btn" onclick="deletePDF(${index})">Delete</button>
+      ` : '';
+
       pdfElement.innerHTML = `
           <div class="pdf-details">
               <img src="ncv logo.jpg" alt="PDF Thumbnail" class="file-thumbnail">
@@ -21,7 +42,7 @@ function displayPDFList() {
           </div>
           <div class="pdf-actions">
               <button class="replace-btn" onclick="replacePDF(${index})">Replace</button>
-              <button class="delete-btn" onclick="deletePDF(${index})">Delete</button>
+              ${deleteButton}  <!-- Delete button is conditionally rendered -->
           </div>
       `;
 
@@ -29,14 +50,14 @@ function displayPDFList() {
   });
 }
 
-// Function to Show Notifications
+// Show notifications
 function showNotification(message, color) {
   const notification = document.getElementById("notification");
   notification.textContent = message;
   notification.style.backgroundColor = color;
 }
 
-// Function to Replace a PDF
+// Function to replace a PDF
 async function replacePDF(index) {
   const pdfInput = document.getElementById("pdfInput");
 
@@ -57,16 +78,23 @@ async function replacePDF(index) {
       return;
   }
 
-  // Save the new file locally and update the stored data
+  // Replace the PDF in localStorage
   let storedPDFs = JSON.parse(localStorage.getItem("pdfFiles")) || [];
-  storedPDFs[index] = { name: file.name, url: URL.createObjectURL(file) };  // Use Object URL for local file
+  storedPDFs[index] = { name: file.name, url: URL.createObjectURL(file) };
   localStorage.setItem("pdfFiles", JSON.stringify(storedPDFs));
   showNotification("✅ PDF replaced successfully!", "#28a745");
   displayPDFList();
 }
 
-// Function to Delete a PDF
+// Function to delete a PDF (only available for a specific user)
 function deletePDF(index) {
+  const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser"));
+
+  if (loggedInUser && loggedInUser.username !== "9769761579") {
+      showNotification("❌ You do not have permission to delete this PDF.", "#dc3545");
+      return;
+  }
+
   let storedPDFs = JSON.parse(localStorage.getItem("pdfFiles")) || [];
   storedPDFs.splice(index, 1); // Remove PDF from array
   localStorage.setItem("pdfFiles", JSON.stringify(storedPDFs));
@@ -74,7 +102,7 @@ function deletePDF(index) {
   displayPDFList();
 }
 
-// Function to Upload PDF (Store locally in browser)
+// Function to upload a PDF (stored locally)
 async function uploadPDF() {
   const pdfInput = document.getElementById("pdfInput");
 
@@ -95,7 +123,6 @@ async function uploadPDF() {
       return;
   }
 
-  // Create a local object URL and save the PDF details in localStorage
   showNotification("Uploading...", "#ffc107");
 
   try {
@@ -108,14 +135,14 @@ async function uploadPDF() {
   }
 }
 
-// Function to Save PDF URL in localStorage
+// Function to save PDF data to localStorage
 function savePDFData(name, url) {
   let storedPDFs = JSON.parse(localStorage.getItem("pdfFiles")) || [];
   storedPDFs.push({ name, url });
   localStorage.setItem("pdfFiles", JSON.stringify(storedPDFs));
 }
 
-// Search function to filter PDFs
+// Function to search through PDFs
 function searchPDFs() {
   const searchInput = document.getElementById("searchInput").value.toLowerCase();
   const pdfListContainer = document.getElementById("pdfList");
@@ -127,5 +154,14 @@ function searchPDFs() {
   });
 }
 
-// Load PDFs on page load
-document.addEventListener("DOMContentLoaded", displayPDFList);
+// Logout function
+function logout() {
+  sessionStorage.removeItem("loggedInUser");  // Remove user from session storage
+  window.location.href = "index.html";  // Redirect to login page
+}
+
+// Run checkUserSession on page load to ensure user is logged in
+document.addEventListener("DOMContentLoaded", function() {
+  checkUserSession();
+  document.getElementById("loginForm").addEventListener("submit", checkLogin);
+});
